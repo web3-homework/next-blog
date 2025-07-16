@@ -1,22 +1,32 @@
 import { notFound } from "next/navigation"
-import type { Metadata } from "next"
-import Image from "next/image"
 import Link from "next/link"
+import Image from "next/image"
+import type { Metadata } from "next"
+import { ArrowLeft, Calendar, User } from "lucide-react"
+
+import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Separator } from "@/components/ui/separator"
-import { Calendar, User, ArrowLeft } from "lucide-react"
-import { Button } from "@/components/ui/button"
+// import { CommentSection } from "@/components/comment-section" // Uncomment when database is integrated
 import { markdownToHtml } from "@/lib/markdown"
 
-// 模拟数据，避免数据库连接错误
-const mockArticles = [
+// Mock data for articles and tags
+export const mockTags = [
+  { id: "1", name: "Welcome", slug: "welcome", color: "#3B82F6", created_at: new Date().toISOString() },
+  { id: "2", name: "Next.js", slug: "nextjs", color: "#000000", created_at: new Date().toISOString() },
+  { id: "3", name: "Tutorial", slug: "tutorial", color: "#4ECDC4", created_at: new Date().toISOString() },
+  { id: "4", name: "React", slug: "react", color: "#61DAFB", created_at: new Date().toISOString() },
+  { id: "5", name: "TypeScript", slug: "typescript", color: "#3178C6", created_at: new Date().toISOString() },
+]
+
+export const mockArticles = [
   {
     id: "1",
     title: "Welcome to My Blog",
     slug: "welcome-to-my-blog",
     content:
-      "# Welcome\n\nThis is your first blog post!\n\n```javascript\nconsole.log('Hello, world!');\n```\n\nThis is a **bold** text and *italic* text. Here's a [link to Google](https://www.google.com).",
+      "# Welcome\n\nThis is your first blog post! It's written in Markdown.\n\n## Features\n\n- **Responsive Design**: Adapts to various screen sizes.\n- **Authentication**: Secure login with NextAuth.js.\n- **Admin Dashboard**: Manage articles with CRUD operations.\n\nEnjoy exploring!",
     excerpt: "Welcome to my personal blog where I share thoughts and tutorials.",
     published: true,
     author: {
@@ -105,7 +115,6 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         <header className="mb-8">
           {article.featured_image && (
             <div className="relative h-64 md:h-96 w-full mb-8 rounded-lg overflow-hidden shadow-custom-md">
-              
               {/* 添加阴影 */}
               <Image
                 src={article.featured_image || "/placeholder.svg"}
@@ -119,16 +128,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
           <div className="flex flex-wrap gap-2 mb-4">
             {article.tags?.map((tag) => (
-              <Badge
-                key={tag.id}
-                variant="secondary"
-                style={{ backgroundColor: `${tag.color}20`, color: tag.color }}
-              >
+              <Badge key={tag.id} variant="secondary" style={{ backgroundColor: `${tag.color}20`, color: tag.color }}>
                 <Link
                   href={`/articles?tag=${tag.slug}`}
                   className="transition-colors hover:bg-primary hover:text-primary-foreground"
                 >
-                  
                   {/* 添加悬停效果 */}
                   {tag.name}
                 </Link>

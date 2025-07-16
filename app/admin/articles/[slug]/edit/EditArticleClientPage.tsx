@@ -1,6 +1,7 @@
 "use client"
 
-import type React, { useState } from "react"
+import type React from "react"
+import { useState } from "react"
 import { Suspense } from "react"
 import { notFound } from "next/navigation"
 import { useRouter } from "next/navigation"
@@ -12,7 +13,7 @@ import { Switch } from "@/components/ui/switch"
 import { Badge } from "@/components/ui/badge"
 import { MarkdownEditor } from "@/components/markdown-editor"
 import { X } from "lucide-react"
-import { mockTags, mockArticles } from "@/app/articles/[slug]/page" // Using mock data for now
+import { mockTags, mockArticles } from "@/app/articles/[slug]/page"
 
 interface EditArticlePageProps {
   params: { slug: string }
@@ -33,9 +34,9 @@ export default function EditArticleClientPage({ params }: EditArticlePageProps) 
   const [published, setPublished] = useState(article.published)
   const [selectedTags, setSelectedTags] = useState<string[]>(article.tags?.map((tag: any) => tag.id) || [])
   const [availableTags, setAvailableTags] = useState<any[]>(mockTags) // 使用模拟标签
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false) // This state is not used here as loading is handled by parent SC
   const [submitting, setSubmitting] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null) // This state is not used here as error is handled by parent SC
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

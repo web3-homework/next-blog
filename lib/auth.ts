@@ -1,4 +1,5 @@
 import type { NextAuthOptions } from "next-auth"
+import { getServerSession } from "next-auth" // Import getServerSession
 import GoogleProvider from "next-auth/providers/google"
 import GitHubProvider from "next-auth/providers/github"
 import CredentialsProvider from "next-auth/providers/credentials"
@@ -88,4 +89,9 @@ export const authOptions: NextAuthOptions = {
     signIn: "/auth/signin",
     error: "/auth/error",
   },
+}
+
+// Helper function to get session on the server
+export async function getSession() {
+  return await getServerSession(authOptions)
 }

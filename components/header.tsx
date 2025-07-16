@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { getSession } from "@/lib/auth"
+import { useSession, signOut } from "next-auth/react" // Keep useSession for client-side rendering
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -13,11 +13,10 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { User, LogOut, Settings, LayoutDashboard } from "lucide-react"
-import { signOut } from "next-auth/react"
-import { ModeToggle } from "./mode-toggle"
+import { ModeToggle } from "./mode-toggle" // Assuming this component exists
 
-export async function Header() {
-  const session = await getSession()
+export function Header() {
+  const { data: session, status } = useSession() // Use useSession for client-side session access
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
@@ -32,7 +31,9 @@ export async function Header() {
           <Link href="/tags" className="text-sm font-medium hover:underline">
             Tags
           </Link>
-          {session ? (
+          {status === "loading" ? (
+            <div className="h-8 w-8 animate-pulse rounded-full bg-muted" />
+          ) : session ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative h-8 w-8 rounded-full">
