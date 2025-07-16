@@ -5,9 +5,15 @@ import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Github, Mail } from "lucide-react"
+// Import `useSearchParams` from `next/navigation`
+import { useSearchParams } from "next/navigation"
 
 export default function SignInPage() {
   const [providers, setProviders] = useState<any>(null)
+
+  // Inside the SignInPage component, get the callbackUrl
+  const searchParams = useSearchParams()
+  const callbackUrl = searchParams.get("callbackUrl") || "/"
 
   useEffect(() => {
     const fetchProviders = async () => {
@@ -36,7 +42,10 @@ export default function SignInPage() {
                 key={provider.name}
                 variant="outline"
                 className="w-full bg-transparent"
-                onClick={() => signIn(provider.id)}
+                // Modify the signIn function call to include callbackUrl
+                // Replace: onClick={() => signIn(provider.id)}
+                // With:
+                onClick={() => signIn(provider.id, { callbackUrl })}
               >
                 {provider.name === "Google" && <Mail className="mr-2 h-4 w-4" />}
                 {provider.name === "GitHub" && <Github className="mr-2 h-4 w-4" />}
