@@ -76,7 +76,6 @@ export function Header() {
               </DropdownMenu>
             ) : (
               <Button variant="ghost" onClick={() => signIn()} className="transition-colors hover:text-primary">
-                
                 {/* 添加悬停效果 */}
                 Sign In
               </Button>
