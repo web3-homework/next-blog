@@ -82,7 +82,9 @@ export default function EditArticlePage({ params }: EditArticlePageProps) {
   useEffect(() => {
     if (status === "loading") return
 
-    if (!session || session.user?.role !== "admin") {
+    // Simplified check: if there's no session, redirect to sign-in.
+    // The `signIn` callback in `lib/auth.ts` now enforces who can log in.
+    if (!session) {
       router.push("/auth/signin?callbackUrl=/admin/articles")
       return
     }
@@ -147,13 +149,16 @@ export default function EditArticlePage({ params }: EditArticlePageProps) {
     )
   }
 
-  if (!session || session.user?.role !== "admin") {
+  // If there's no session after loading, it means the user is not the allowed admin.
+  if (!session) {
     return (
       <div className="container py-8">
         <Alert variant="destructive" className="max-w-lg mx-auto">
           <Ban className="h-6 w-6" />
           <AlertTitle>Access Denied</AlertTitle>
-          <AlertDescription>You do not have permission to view this page.</AlertDescription>
+          <AlertDescription>
+            You do not have permission to view this page. Please sign in with the authorized account.
+          </AlertDescription>
         </Alert>
       </div>
     )

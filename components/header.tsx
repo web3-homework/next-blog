@@ -68,14 +68,13 @@ export function Header() {
                     </div>
                   </div>
                   <DropdownMenuSeparator />
-                  {session.user?.role === "admin" && (
-                    <DropdownMenuItem className="cursor-pointer" asChild>
-                      <Link href="/admin/articles">
-                        <LayoutDashboard className="mr-2 h-4 w-4" />
-                        Admin Dashboard
-                      </Link>
-                    </DropdownMenuItem>
-                  )}
+                  {/* Removed the explicit session.user?.role === "admin" check */}
+                  <DropdownMenuItem className="cursor-pointer" asChild>
+                    <Link href="/admin/articles">
+                      <LayoutDashboard className="mr-2 h-4 w-4" />
+                      Admin Dashboard
+                    </Link>
+                  </DropdownMenuItem>
                   <DropdownMenuItem className="cursor-pointer" onSelect={() => signOut()}>
                     <LogOut className="mr-2 h-4 w-4" />
                     Sign out

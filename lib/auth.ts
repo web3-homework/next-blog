@@ -31,15 +31,26 @@ export const authOptions: NextAuthOptions = {
   },
 
   callbacks: {
+    async signIn({ user }) {
+      // Only allow sign-in if the user's email matches the ADMIN_EMAIL environment variable
+      if (process.env.ADMIN_EMAIL && user.email === process.env.ADMIN_EMAIL) {
+        return true
+      }
+      // Deny sign-in for any other email
+      return false
+    },
     async jwt({ token, user }) {
       if (user) {
-        token.role = "user"
+        // If the user successfully signed in (meaning their email matched ADMIN_EMAIL),
+        // we can implicitly set their role to 'admin' in the token.
+        token.role = "admin"
       }
       return token
     },
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.sub || ""
+        // Assign the role from the token (which will be 'admin' if signIn was successful)
         session.user.role = (token.role as string) || "user"
       }
       return session
