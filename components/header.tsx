@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { useSession, signOut } from "next-auth/react"
+import { useSession, signOut } from "next-auth/react" 
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -15,7 +15,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { User, LogOut, Settings, LayoutDashboard } from "lucide-react"
 
 export function Header() {
-  const { data: session, status } = useSession()
+  const { data: session, status } = useSession() 
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
