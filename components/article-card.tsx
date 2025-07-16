@@ -29,7 +29,7 @@ interface ArticleCardProps {
 export function ArticleCard({ article }: ArticleCardProps) {
   return (
     <Card className="h-full overflow-hidden transition-all duration-300 ease-in-out hover:shadow-custom-lg hover:-translate-y-1">
-      {" "}
+      
       {/* 增强悬停效果 */}
       {article.featured_image && (
         <div className="relative h-48 w-full">

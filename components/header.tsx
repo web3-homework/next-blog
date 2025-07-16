@@ -18,12 +18,10 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm">
-      {" "}
       {/* 添加阴影和背景模糊 */}
       <div className="container flex h-14 items-center">
         <div className="mr-4 flex">
           <Link href="/" className="mr-6 flex items-center space-x-2 transition-colors hover:text-primary">
-            {" "}
             {/* 添加悬停效果 */}
             <PenTool className="h-6 w-6" />
             <span className="font-bold">My Blog</span>
@@ -53,7 +51,6 @@ export function Header() {
                     variant="ghost"
                     className="relative h-8 w-8 rounded-full transition-transform hover:scale-105"
                   >
-                    {" "}
                     {/* 添加悬停缩放 */}
                     <Avatar className="h-8 w-8">
                       <AvatarImage src={session.user?.image || ""} alt={session.user?.name || ""} />
@@ -79,7 +76,7 @@ export function Header() {
               </DropdownMenu>
             ) : (
               <Button variant="ghost" onClick={() => signIn()} className="transition-colors hover:text-primary">
-                {" "}
+                
                 {/* 添加悬停效果 */}
                 Sign In
               </Button>

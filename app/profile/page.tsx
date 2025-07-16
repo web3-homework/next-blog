@@ -36,11 +36,11 @@ export default function ProfilePage() {
     <div className="container py-8">
       <div className="max-w-2xl mx-auto">
         <Card className="shadow-custom-md">
-          {" "}
+          
           {/* 添加阴影 */}
           <CardHeader className="text-center">
             <Avatar className="h-24 w-24 mx-auto mb-4 shadow-custom-sm">
-              {" "}
+              
               {/* 添加阴影 */}
               <AvatarImage src={session.user?.image || ""} />
               <AvatarFallback className="text-2xl">{session.user?.name?.charAt(0).toUpperCase()}</AvatarFallback>

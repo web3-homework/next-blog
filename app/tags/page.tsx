@@ -34,7 +34,7 @@ export default async function TagsPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {tags.map((tag) => (
           <Card key={tag.id} className="hover:shadow-custom-md transition-shadow">
-            {" "}
+            
             {/* 增强悬停效果 */}
             <CardHeader className="pb-3">
               <div className="flex items-center space-x-2">
@@ -43,12 +43,12 @@ export default async function TagsPage() {
               </div>
             </CardHeader>
             <CardContent>
-              <Badge variant="secondary" style={{ backgroundColor: `${tag.color}20`, color: tag.color }} asChild>
+              <Badge variant="secondary" style={{ backgroundColor: `${tag.color}20`, color: tag.color }}>
                 <Link
                   href={`/articles?tag=${tag.slug}`}
                   className="cursor-pointer transition-colors hover:bg-primary hover:text-primary-foreground"
                 >
-                  {" "}
+                  
                   {/* 添加悬停效果 */}
                   View Articles
                 </Link>

@@ -95,14 +95,14 @@ export default function NewArticlePage() {
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="Enter article title"
                 required
-                className="focus-visible:ring-primary" {/* 优化焦点样式 */}
+                className="focus-visible:ring-primary"
               />
             </div>
 
             <div className="space-y-2">
               <Label>Content</Label>
               <MarkdownEditor
-                value={content}\
+                value={content}
                 onChange={setContent}
                 placeholder="Write your article content in Markdown..."
               />
@@ -115,7 +115,7 @@ export default function NewArticlePage() {
                   <Badge
                     key={tag.id}
                     variant={selectedTags.includes(tag.id) ? "default" : "outline"}
-                    className="cursor-pointer transition-colors hover:bg-primary hover:text-primary-foreground" {/* 添加悬停效果 */}
+                    className="cursor-pointer transition-colors hover:bg-primary hover:text-primary-foreground"
                     onClick={() => toggleTag(tag.id)}
                   >
                     {tag.name}

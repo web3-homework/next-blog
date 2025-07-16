@@ -105,7 +105,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         <header className="mb-8">
           {article.featured_image && (
             <div className="relative h-64 md:h-96 w-full mb-8 rounded-lg overflow-hidden shadow-custom-md">
-              {" "}
+              
               {/* 添加阴影 */}
               <Image
                 src={article.featured_image || "/placeholder.svg"}
@@ -123,13 +123,12 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 key={tag.id}
                 variant="secondary"
                 style={{ backgroundColor: `${tag.color}20`, color: tag.color }}
-                asChild
               >
                 <Link
                   href={`/articles?tag=${tag.slug}`}
                   className="transition-colors hover:bg-primary hover:text-primary-foreground"
                 >
-                  {" "}
+                  
                   {/* 添加悬停效果 */}
                   {tag.name}
                 </Link>
