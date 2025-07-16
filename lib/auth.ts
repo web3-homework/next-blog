@@ -48,5 +48,6 @@ export const authOptions: NextAuthOptions = {
 
   pages: {
     signIn: "/auth/signin",
+    error: "/auth/error", // 👈 新增，让错误跳转到友好的页面
   },
 }

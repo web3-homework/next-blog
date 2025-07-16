@@ -28,7 +28,9 @@ interface ArticleCardProps {
 
 export function ArticleCard({ article }: ArticleCardProps) {
   return (
-    <Card className="h-full overflow-hidden transition-shadow hover:shadow-lg">
+    <Card className="h-full overflow-hidden transition-all duration-300 ease-in-out hover:shadow-custom-lg hover:-translate-y-1">
+      {" "}
+      {/* 增强悬停效果 */}
       {article.featured_image && (
         <div className="relative h-48 w-full">
           <Image
@@ -37,14 +39,12 @@ export function ArticleCard({ article }: ArticleCardProps) {
             fill
             className="object-cover"
             onError={(e) => {
-              // 处理图片加载错误
               const target = e.target as HTMLImageElement
               target.style.display = "none"
             }}
           />
         </div>
       )}
-
       <CardHeader className="pb-3">
         <div className="flex flex-wrap gap-1 mb-2">
           {article.tags?.map((tag) => (
@@ -58,11 +58,9 @@ export function ArticleCard({ article }: ArticleCardProps) {
           <h3 className="text-xl font-semibold line-clamp-2 hover:text-primary transition-colors">{article.title}</h3>
         </Link>
       </CardHeader>
-
       <CardContent className="pb-3">
         {article.excerpt && <p className="text-muted-foreground line-clamp-3 mb-4">{article.excerpt}</p>}
       </CardContent>
-
       <CardFooter className="pt-0">
         <div className="flex items-center justify-between w-full text-sm text-muted-foreground">
           <div className="flex items-center space-x-2">

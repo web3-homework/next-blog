@@ -47,20 +47,32 @@ export default async function HomePage() {
   return (
     <div className="container py-8">
       {/* Hero Section */}
-      <section className="text-center py-12 mb-12">
-        <div className="max-w-3xl mx-auto">
-          <PenTool className="h-16 w-16 mx-auto mb-6 text-primary" />
-          <h1 className="text-4xl md:text-6xl font-bold mb-6">Welcome to My Blog</h1>
-          <p className="text-xl text-muted-foreground mb-8">
+      <section className="text-center py-16 md:py-24 mb-12 bg-gradient-to-b from-background to-muted/20 rounded-lg shadow-custom-md">
+        {" "}
+        {/* 优化 Hero 样式 */}
+        <div className="max-w-3xl mx-auto px-4">
+          <PenTool className="h-16 w-16 mx-auto mb-6 text-primary animate-bounce-slow" /> {/* 添加动画 */}
+          <h1 className="text-4xl md:text-6xl font-extrabold mb-6 leading-tight">Welcome to My Blog</h1>{" "}
+          {/* 优化字体 */}
+          <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
             Sharing thoughts, tutorials, and insights about web development, technology, and everything in between.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" asChild>
+            <Button size="lg" asChild className="shadow-custom-sm hover:shadow-custom-md">
+              {" "}
+              {/* 添加阴影 */}
               <Link href="/articles">
                 Read Articles <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
-            <Button size="lg" variant="outline" asChild>
+            <Button
+              size="lg"
+              variant="outline"
+              asChild
+              className="shadow-custom-sm hover:shadow-custom-md bg-transparent"
+            >
+              {" "}
+              {/* 添加阴影 */}
               <Link href="/tags">Browse Topics</Link>
             </Button>
           </div>
@@ -68,16 +80,17 @@ export default async function HomePage() {
       </section>
 
       {/* Latest Articles */}
-      <section className="mb-12">
+      <section className="mb-12 py-8">
+        {" "}
+        {/* 调整间距 */}
         <div className="flex items-center justify-between mb-8">
           <h2 className="text-3xl font-bold">Latest Articles</h2>
-          <Button variant="outline" asChild>
+          <Button variant="outline" asChild className="transition-colors hover:text-primary bg-transparent">
             <Link href="/articles">
               View All <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
         </div>
-
         {articles.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {articles.map((article: any) => (
@@ -92,7 +105,9 @@ export default async function HomePage() {
       </section>
 
       {/* Popular Tags */}
-      <section>
+      <section className="py-8">
+        {" "}
+        {/* 调整间距 */}
         <h2 className="text-3xl font-bold mb-8">Popular Topics</h2>
         {tags.length > 0 ? (
           <div className="flex flex-wrap gap-3">

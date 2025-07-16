@@ -22,7 +22,7 @@ export default function ProfilePage() {
     return (
       <div className="container py-8">
         <div className="max-w-2xl mx-auto">
-          <div className="h-64 bg-muted animate-pulse rounded-lg" />
+          <div className="h-64 bg-muted animate-pulse rounded-lg shadow-custom-md" /> {/* 添加阴影 */}
         </div>
       </div>
     )
@@ -35,9 +35,13 @@ export default function ProfilePage() {
   return (
     <div className="container py-8">
       <div className="max-w-2xl mx-auto">
-        <Card>
+        <Card className="shadow-custom-md">
+          {" "}
+          {/* 添加阴影 */}
           <CardHeader className="text-center">
-            <Avatar className="h-24 w-24 mx-auto mb-4">
+            <Avatar className="h-24 w-24 mx-auto mb-4 shadow-custom-sm">
+              {" "}
+              {/* 添加阴影 */}
               <AvatarImage src={session.user?.image || ""} />
               <AvatarFallback className="text-2xl">{session.user?.name?.charAt(0).toUpperCase()}</AvatarFallback>
             </Avatar>
@@ -47,7 +51,6 @@ export default function ProfilePage() {
               {session.user?.email}
             </CardDescription>
           </CardHeader>
-
           <CardContent className="space-y-6">
             <div className="flex items-center justify-center">
               <Badge variant={session.user?.role === "admin" ? "default" : "secondary"}>

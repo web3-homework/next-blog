@@ -8,25 +8,58 @@ import { Separator } from "@/components/ui/separator"
 import { Calendar, User, ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { markdownToHtml } from "@/lib/markdown"
-import type { Article } from "@/types"
-import { CommentSection } from "@/components/comment-section"
+
+// 模拟数据，避免数据库连接错误
+const mockArticles = [
+  {
+    id: "1",
+    title: "Welcome to My Blog",
+    slug: "welcome-to-my-blog",
+    content:
+      "# Welcome\n\nThis is your first blog post!\n\n```javascript\nconsole.log('Hello, world!');\n```\n\nThis is a **bold** text and *italic* text. Here's a [link to Google](https://www.google.com).",
+    excerpt: "Welcome to my personal blog where I share thoughts and tutorials.",
+    published: true,
+    author: {
+      id: "1",
+      name: "Blog Author",
+      image: "/placeholder.svg?height=40&width=40",
+    },
+    tags: [{ id: "1", name: "Welcome", slug: "welcome", color: "#3B82F6" }],
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    featured_image: "/placeholder.svg?height=600&width=1200",
+  },
+  {
+    id: "2",
+    title: "Getting Started with Next.js",
+    slug: "getting-started-nextjs",
+    content:
+      "# Getting Started\n\nNext.js is a powerful React framework...\n\n- Item 1\n- Item 2\n\n```python\nprint('Hello from Python')\n```",
+    excerpt: "Learn the basics of Next.js and how to build modern web applications.",
+    published: true,
+    author: {
+      id: "1",
+      name: "Blog Author",
+      image: "/placeholder.svg?height=40&width=40",
+    },
+    tags: [
+      { id: "2", name: "Next.js", slug: "nextjs", color: "#000000" },
+      { id: "3", name: "Tutorial", slug: "tutorial", color: "#4ECDC4" },
+    ],
+    created_at: new Date(Date.now() - 86400000).toISOString(),
+    updated_at: new Date(Date.now() - 86400000).toISOString(),
+    featured_image: "/placeholder.svg?height=600&width=1200",
+  },
+]
 
 interface ArticlePageProps {
   params: { slug: string }
 }
 
-async function getArticle(slug: string): Promise<Article | null> {
-  try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/articles/${slug}`, {
-      next: { revalidate: 3600 }, // ISR
-    })
-
-    if (!res.ok) return null
-
-    return res.json()
-  } catch {
-    return null
-  }
+async function getArticle(slug: string) {
+  // 模拟从 API 获取文章数据
+  const article = mockArticles.find((a) => a.slug === slug)
+  return article || null
 }
 
 export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
@@ -60,7 +93,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
   return (
     <div className="container py-8">
-      <Button variant="ghost" asChild className="mb-6">
+      <Button variant="ghost" asChild className="mb-6 transition-colors hover:text-primary">
         <Link href="/articles">
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Articles
@@ -71,7 +104,9 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         {/* Article Header */}
         <header className="mb-8">
           {article.featured_image && (
-            <div className="relative h-64 md:h-96 w-full mb-8 rounded-lg overflow-hidden">
+            <div className="relative h-64 md:h-96 w-full mb-8 rounded-lg overflow-hidden shadow-custom-md">
+              {" "}
+              {/* 添加阴影 */}
               <Image
                 src={article.featured_image || "/placeholder.svg"}
                 alt={article.title}
@@ -90,7 +125,14 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 style={{ backgroundColor: `${tag.color}20`, color: tag.color }}
                 asChild
               >
-                <Link href={`/articles?tag=${tag.slug}`}>{tag.name}</Link>
+                <Link
+                  href={`/articles?tag=${tag.slug}`}
+                  className="transition-colors hover:bg-primary hover:text-primary-foreground"
+                >
+                  {" "}
+                  {/* 添加悬停效果 */}
+                  {tag.name}
+                </Link>
               </Badge>
             ))}
           </div>
@@ -128,7 +170,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         <Separator className="my-8" />
 
         {/* Comments Section */}
-        <CommentSection articleId={article.id} />
+        {/* 暂时注释掉评论区，因为它依赖数据库 */}
+        {/* <CommentSection articleId={article.id} /> */}
+        <div className="text-center py-8 text-muted-foreground">
+          <p>评论功能已暂时禁用，请在集成数据库后启用。</p>
+        </div>
       </article>
     </div>
   )

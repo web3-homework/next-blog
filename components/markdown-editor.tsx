@@ -33,7 +33,7 @@ export function MarkdownEditor({ value, onChange, placeholder }: MarkdownEditorP
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
-          className="min-h-[400px] font-mono"
+          className="min-h-[400px] font-mono focus-visible:ring-primary" /* 优化焦点样式 */
         />
       </TabsContent>
 
