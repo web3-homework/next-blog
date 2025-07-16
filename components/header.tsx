@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { useSession, signOut } from "next-auth/react" // Keep useSession for client-side rendering
+import { useSession, signOut } from "next-auth/react" 
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -13,10 +13,9 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { User, LogOut, Settings, LayoutDashboard } from "lucide-react"
-import { ModeToggle } from "./mode-toggle" // Assuming this component exists
 
 export function Header() {
-  const { data: session, status } = useSession() // Use useSession for client-side session access
+  const { data: session, status } = useSession() 
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
@@ -80,7 +79,6 @@ export function Header() {
               <Link href="/auth/signin">Sign In</Link>
             </Button>
           )}
-          <ModeToggle />
         </nav>
       </div>
     </header>

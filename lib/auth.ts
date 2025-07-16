@@ -4,9 +4,9 @@ import GoogleProvider from "next-auth/providers/google"
 import GitHubProvider from "next-auth/providers/github"
 import CredentialsProvider from "next-auth/providers/credentials"
 
-export const authOptions: NextAuthOptions = {
-  secret: process.env.NEXTAUTH_SECRET || "development-secret-key",
+const ADMIN_EMAILS = process.env.ADMIN_EMAILS?.split(",") || []
 
+export const authOptions: NextAuthOptions = {
   providers: [
     // Google Provider
     ...(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
@@ -27,26 +27,21 @@ export const authOptions: NextAuthOptions = {
           }),
         ]
       : []),
-
-    // Credentials Provider for password login
+    
     CredentialsProvider({
       name: "Password",
       credentials: {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        // Check if the provided password matches NEXTAUTH_SECRET
         if (credentials?.password === process.env.NEXTAUTH_SECRET) {
-          // Return a user object. The email here is important if ADMIN_EMAIL is set,
-          // as the signIn callback will check it.
           return {
             id: "password-admin", // A unique ID for this user
-            email: process.env.ADMIN_EMAIL || "admin@example.com", // Use ADMIN_EMAIL if set, otherwise a default
+            email: process.env.ADMIN_EMAIL, // Use ADMIN_EMAIL if set, otherwise a default
             name: "Admin User",
             role: "admin", // Explicitly set role for this provider
           }
         }
-        // If password does not match, return null
         return null
       },
     }),
@@ -57,31 +52,19 @@ export const authOptions: NextAuthOptions = {
   },
 
   callbacks: {
-    async signIn({ user }) {
-      // If ADMIN_EMAIL is set, only allow sign-in if the user's email matches it.
-      // This applies to all providers, including the CredentialsProvider.
-      if (process.env.ADMIN_EMAIL && user.email !== process.env.ADMIN_EMAIL) {
-        return false
-      }
-      // Otherwise, allow sign-in
-      return true
-    },
     async jwt({ token, user }) {
       if (user) {
-        // If the user successfully signed in (meaning their email matched ADMIN_EMAIL
-        // or they used the correct password), implicitly set their role to 'admin'.
-        // The 'user' object from CredentialsProvider will already have role: 'admin'.
-        token.role = (user as any).role || "admin"
+        token.role = user.email ? ADMIN_EMAILS.includes(user.email) ? 'admin' : 'user' : 'user';
       }
-      return token
+      return token;
     },
     async session({ session, token }) {
       if (session.user) {
-        session.user.id = token.sub || ""
-        // Assign the role from the token (which will be 'admin' if signIn was successful)
-        session.user.role = (token.role as string) || "user"
+        if (token.role) {
+          session.user.role = token.role;
+        }
       }
-      return session
+      return session;
     },
   },
 

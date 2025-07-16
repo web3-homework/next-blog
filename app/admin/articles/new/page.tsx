@@ -95,7 +95,6 @@ export default function NewArticlePage() {
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="Enter article title"
                 required
-                className="focus-visible:ring-primary"
               />
             </div>
 

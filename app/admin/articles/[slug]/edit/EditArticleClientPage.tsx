@@ -78,7 +78,6 @@ export default function EditArticleClientPage({ params }: EditArticlePageProps) 
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="Enter article title"
                 required
-                className="focus-visible:ring-primary"
               />
             </div>
 

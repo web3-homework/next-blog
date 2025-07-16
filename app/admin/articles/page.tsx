@@ -20,15 +20,8 @@ export const metadata = {
 export default async function AdminArticlesPage() {
   const session = await getSession()
 
-  // If no session, redirect to sign-in.
-  if (!session) {
+  if (!session || session.user?.role !== "admin") {
     redirect("/auth/signin")
-  }
-  // If session exists, but the user is not an admin (which should not happen
-  // if ADMIN_EMAIL is set and login is enforced, but good for robustness),
-  // then forbid access.
-  if (session.user?.role !== "admin") {
-    forbidden() // [^2]
   }
 
   // In a real application, you would fetch articles from your database here

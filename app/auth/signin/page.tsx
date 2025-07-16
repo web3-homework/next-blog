@@ -24,7 +24,7 @@ export default function SignInPage() {
   const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(false)
 
   const searchParams = useSearchParams()
-  const callbackUrl = searchParams.get("callbackUrl") || "/"
+  const callbackUrl = searchParams.get("callbackUrl") || "/admin/articles"
 
   useEffect(() => {
     const fetchProviders = async () => {
@@ -42,7 +42,7 @@ export default function SignInPage() {
     const result = await signIn("credentials", {
       password,
       callbackUrl,
-      redirect: false, // Prevent NextAuth.js from redirecting automatically
+      redirect: false, 
     })
 
     if (result?.error) {
@@ -52,7 +52,6 @@ export default function SignInPage() {
         variant: "destructive",
       })
     } else {
-      // If successful, manually redirect
       window.location.href = callbackUrl
     }
     setIsPasswordDialogOpen(false)
@@ -60,7 +59,7 @@ export default function SignInPage() {
   }
 
   return (
-    <div className="container flex items-center justify-center min-h-[calc(100vh-4rem)] py-8">
+    <div className="container flex items-center justify-center min-h-[calc(100vh-5rem)] py-8">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl">Sign In</CardTitle>

@@ -83,6 +83,152 @@ const mockArticles = [
     created_at: new Date(Date.now() - 3 * 86400000).toISOString(),
     updated_at: new Date(Date.now() - 3 * 86400000).toISOString(),
   },
+  {
+    id: "1",
+    title: "Welcome to My Blog",
+    slug: "welcome-to-my-blog",
+    content: "# Welcome\n\nThis is your first blog post!",
+    excerpt: "Welcome to my personal blog where I share thoughts and tutorials.",
+    published: true,
+    author: {
+      id: "1",
+      name: "Blog Author",
+      image: "/placeholder.svg?height=40&width=40",
+    },
+    tags: [{ id: "1", name: "Welcome", slug: "welcome", color: "#3B82F6" }],
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  },
+  {
+    id: "2",
+    title: "Getting Started with Next.js",
+    slug: "getting-started-nextjs",
+    content: "# Getting Started\n\nNext.js is a powerful React framework...",
+    excerpt: "Learn the basics of Next.js and how to build modern web applications.",
+    published: true,
+    author: {
+      id: "1",
+      name: "Blog Author",
+      image: "/placeholder.svg?height=40&width=40",
+    },
+    tags: [
+      { id: "2", name: "Next.js", slug: "nextjs", color: "#000000" },
+      { id: "3", name: "Tutorial", slug: "tutorial", color: "#4ECDC4" },
+    ],
+    created_at: new Date(Date.now() - 86400000).toISOString(),
+    updated_at: new Date(Date.now() - 86400000).toISOString(),
+  },
+  {
+    id: "3",
+    title: "Understanding React Hooks",
+    slug: "understanding-react-hooks",
+    content: "# React Hooks\n\nHooks let you use state and other React features without writing a class.",
+    excerpt: "A deep dive into React Hooks and how they simplify component logic.",
+    published: true,
+    author: {
+      id: "1",
+      name: "Blog Author",
+      image: "/placeholder.svg?height=40&width=40",
+    },
+    tags: [
+      { id: "4", name: "React", slug: "react", color: "#61DAFB" },
+      { id: "3", name: "Tutorial", slug: "tutorial", color: "#4ECDC4" },
+    ],
+    created_at: new Date(Date.now() - 2 * 86400000).toISOString(),
+    updated_at: new Date(Date.now() - 2 * 86400000).toISOString(),
+  },
+  {
+    id: "4",
+    title: "TypeScript Best Practices",
+    slug: "typescript-best-practices",
+    content: "# TypeScript\n\nUsing TypeScript effectively can improve code quality.",
+    excerpt: "Tips and tricks for writing clean and maintainable TypeScript code.",
+    published: true,
+    author: {
+      id: "1",
+      name: "Blog Author",
+      image: "/placeholder.svg?height=40&width=40",
+    },
+    tags: [
+      { id: "5", name: "TypeScript", slug: "typescript", color: "#3178C6" },
+      { id: "6", name: "Tips", slug: "tips", color: "#45B7D1" },
+    ],
+    created_at: new Date(Date.now() - 3 * 86400000).toISOString(),
+    updated_at: new Date(Date.now() - 3 * 86400000).toISOString(),
+  },
+  {
+    id: "5",
+    title: "Welcome to My Blog",
+    slug: "welcome-to-my-blog",
+    content: "# Welcome\n\nThis is your first blog post!",
+    excerpt: "Welcome to my personal blog where I share thoughts and tutorials.",
+    published: true,
+    author: {
+      id: "1",
+      name: "Blog Author",
+      image: "/placeholder.svg?height=40&width=40",
+    },
+    tags: [{ id: "1", name: "Welcome", slug: "welcome", color: "#3B82F6" }],
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  },
+  {
+    id: "6",
+    title: "Getting Started with Next.js",
+    slug: "getting-started-nextjs",
+    content: "# Getting Started\n\nNext.js is a powerful React framework...",
+    excerpt: "Learn the basics of Next.js and how to build modern web applications.",
+    published: true,
+    author: {
+      id: "1",
+      name: "Blog Author",
+      image: "/placeholder.svg?height=40&width=40",
+    },
+    tags: [
+      { id: "2", name: "Next.js", slug: "nextjs", color: "#000000" },
+      { id: "3", name: "Tutorial", slug: "tutorial", color: "#4ECDC4" },
+    ],
+    created_at: new Date(Date.now() - 86400000).toISOString(),
+    updated_at: new Date(Date.now() - 86400000).toISOString(),
+  },
+  {
+    id: "7",
+    title: "Understanding React Hooks",
+    slug: "understanding-react-hooks",
+    content: "# React Hooks\n\nHooks let you use state and other React features without writing a class.",
+    excerpt: "A deep dive into React Hooks and how they simplify component logic.",
+    published: true,
+    author: {
+      id: "1",
+      name: "Blog Author",
+      image: "/placeholder.svg?height=40&width=40",
+    },
+    tags: [
+      { id: "4", name: "React", slug: "react", color: "#61DAFB" },
+      { id: "3", name: "Tutorial", slug: "tutorial", color: "#4ECDC4" },
+    ],
+    created_at: new Date(Date.now() - 2 * 86400000).toISOString(),
+    updated_at: new Date(Date.now() - 2 * 86400000).toISOString(),
+  },
+  {
+    id: "8",
+    title: "TypeScript Best Practices",
+    slug: "typescript-best-practices",
+    content: "# TypeScript\n\nUsing TypeScript effectively can improve code quality.",
+    excerpt: "Tips and tricks for writing clean and maintainable TypeScript code.",
+    published: true,
+    author: {
+      id: "1",
+      name: "Blog Author",
+      image: "/placeholder.svg?height=40&width=40",
+    },
+    tags: [
+      { id: "5", name: "TypeScript", slug: "typescript", color: "#3178C6" },
+      { id: "6", name: "Tips", slug: "tips", color: "#45B7D1" },
+    ],
+    created_at: new Date(Date.now() - 3 * 86400000).toISOString(),
+    updated_at: new Date(Date.now() - 3 * 86400000).toISOString(),
+  },
 ]
 
 // 模拟标签数据 (与之前保持一致)
@@ -154,14 +300,14 @@ export default function ArticlesPage() {
           placeholder="Search articles..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="pl-10 focus-visible:ring-primary"
+          className="pl-10"
         />
       </div>
 
       {/* Tag Filter */}
       <div className="mb-6">
         <Select value={selectedTagSlug} onValueChange={handleTagChange}>
-          <SelectTrigger className="w-full md:w-[200px] focus-visible:ring-primary">
+          <SelectTrigger className="w-full md:w-[200px]">
             <Filter className="mr-2 h-4 w-4" />
             <SelectValue placeholder="Filter by tag" />
           </SelectTrigger>

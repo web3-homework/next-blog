@@ -72,26 +72,6 @@ async function getArticle(slug: string) {
   return article || null
 }
 
-export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
-  const article = await getArticle(params.slug)
-
-  if (!article) {
-    return {
-      title: "Article Not Found",
-    }
-  }
-
-  return {
-    title: article.title,
-    description: article.excerpt,
-    openGraph: {
-      title: article.title,
-      description: article.excerpt || "",
-      images: article.featured_image ? [article.featured_image] : [],
-    },
-  }
-}
-
 export default async function ArticlePage({ params }: ArticlePageProps) {
   const article = await getArticle(params.slug)
 
