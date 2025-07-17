@@ -1,31 +1,54 @@
-import { Suspense } from "react"
+"use client"
+
+import { useState, useEffect, Suspense } from "react"
+import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { PlusCircle } from "lucide-react"
-import { getSession } from "@/lib/auth"
-import { redirect } from "next/navigation"
-import { forbidden } from "next/navigation"
-
+import { useSession } from "next-auth/react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
-import { ArticleActions } from "@/components/article-actions" // Corrected import path
-import { mockArticles } from "@/app/articles/[slug]/page"
+import { ArticleActions } from "@/components/article-actions"
+import type { Article } from "@/types"
 
-export const metadata = {
-  title: "Admin Articles",
-  description: "Manage your blog articles",
-}
+export default function AdminArticlesPage() {
+  const { data: session, status } = useSession()
+  const router = useRouter()
+  const [articles, setArticles] = useState<Article[]>([])
+  const [loading, setLoading] = useState(true)
 
-export default async function AdminArticlesPage() {
-  const session = await getSession()
+  useEffect(() => {
+    if (status === "loading") return
 
-  if (!session || session.user?.role !== "admin") {
-    redirect("/auth/signin")
+    if (session?.user?.role !== "admin") {
+      router.push("/")
+      return
+    }
+
+    fetchArticles()
+  }, [session, status, router])
+
+  const fetchArticles = async () => {
+    try {
+      const res = await fetch("/api/articles")
+      if (res.ok) {
+        const data = await res.json()
+        setArticles(data || [])
+      }
+    } catch (error) {
+    } finally {
+      setLoading(false)
+    }
   }
 
-  // In a real application, you would fetch articles from your database here
-  const articles = mockArticles
+  if (status === "loading" || session?.user?.role !== "admin") {
+    return (
+      <div className="container py-8">
+        <div className="max-w-6xl mx-auto h-96 bg-muted animate-pulse rounded-lg" />
+      </div>
+    )
+  }
 
   return (
     <div className="container py-8">
@@ -50,7 +73,7 @@ export default async function AdminArticlesPage() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Title</TableHead>
-                  <TableHead>Slug</TableHead>
+                  <TableHead>Content</TableHead>
                   <TableHead>Published</TableHead>
                   <TableHead>Tags</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
@@ -60,7 +83,7 @@ export default async function AdminArticlesPage() {
                 {articles.map((article) => (
                   <TableRow key={article.id}>
                     <TableCell className="font-medium">{article.title}</TableCell>
-                    <TableCell>{article.slug}</TableCell>
+                    <TableCell>{article.content}</TableCell>
                     <TableCell>
                       <Badge variant={article.published ? "default" : "secondary"}>
                         {article.published ? "Published" : "Draft"}

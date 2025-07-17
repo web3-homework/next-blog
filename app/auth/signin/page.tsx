@@ -32,7 +32,6 @@ export default function SignInPage() {
         const res = await getProviders()
         setProviders(res)
       } catch (error) {
-        console.error("Failed to fetch providers:", error)
       }
     }
     fetchProviders()

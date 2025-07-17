@@ -8,262 +8,49 @@ import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Search, Filter } from "lucide-react"
 
-// 模拟文章数据 (与之前保持一致)
-const mockArticles = [
-  {
-    id: "1",
-    title: "Welcome to My Blog",
-    slug: "welcome-to-my-blog",
-    content: "# Welcome\n\nThis is your first blog post!",
-    excerpt: "Welcome to my personal blog where I share thoughts and tutorials.",
-    published: true,
-    author: {
-      id: "1",
-      name: "Blog Author",
-      image: "/placeholder.svg?height=40&width=40",
-    },
-    tags: [{ id: "1", name: "Welcome", slug: "welcome", color: "#3B82F6" }],
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-  {
-    id: "2",
-    title: "Getting Started with Next.js",
-    slug: "getting-started-nextjs",
-    content: "# Getting Started\n\nNext.js is a powerful React framework...",
-    excerpt: "Learn the basics of Next.js and how to build modern web applications.",
-    published: true,
-    author: {
-      id: "1",
-      name: "Blog Author",
-      image: "/placeholder.svg?height=40&width=40",
-    },
-    tags: [
-      { id: "2", name: "Next.js", slug: "nextjs", color: "#000000" },
-      { id: "3", name: "Tutorial", slug: "tutorial", color: "#4ECDC4" },
-    ],
-    created_at: new Date(Date.now() - 86400000).toISOString(),
-    updated_at: new Date(Date.now() - 86400000).toISOString(),
-  },
-  {
-    id: "3",
-    title: "Understanding React Hooks",
-    slug: "understanding-react-hooks",
-    content: "# React Hooks\n\nHooks let you use state and other React features without writing a class.",
-    excerpt: "A deep dive into React Hooks and how they simplify component logic.",
-    published: true,
-    author: {
-      id: "1",
-      name: "Blog Author",
-      image: "/placeholder.svg?height=40&width=40",
-    },
-    tags: [
-      { id: "4", name: "React", slug: "react", color: "#61DAFB" },
-      { id: "3", name: "Tutorial", slug: "tutorial", color: "#4ECDC4" },
-    ],
-    created_at: new Date(Date.now() - 2 * 86400000).toISOString(),
-    updated_at: new Date(Date.now() - 2 * 86400000).toISOString(),
-  },
-  {
-    id: "4",
-    title: "TypeScript Best Practices",
-    slug: "typescript-best-practices",
-    content: "# TypeScript\n\nUsing TypeScript effectively can improve code quality.",
-    excerpt: "Tips and tricks for writing clean and maintainable TypeScript code.",
-    published: true,
-    author: {
-      id: "1",
-      name: "Blog Author",
-      image: "/placeholder.svg?height=40&width=40",
-    },
-    tags: [
-      { id: "5", name: "TypeScript", slug: "typescript", color: "#3178C6" },
-      { id: "6", name: "Tips", slug: "tips", color: "#45B7D1" },
-    ],
-    created_at: new Date(Date.now() - 3 * 86400000).toISOString(),
-    updated_at: new Date(Date.now() - 3 * 86400000).toISOString(),
-  },
-  {
-    id: "5",
-    title: "Welcome to My Blog",
-    slug: "welcome-to-my-blog",
-    content: "# Welcome\n\nThis is your first blog post!",
-    excerpt: "Welcome to my personal blog where I share thoughts and tutorials.",
-    published: true,
-    author: {
-      id: "1",
-      name: "Blog Author",
-      image: "/placeholder.svg?height=40&width=40",
-    },
-    tags: [{ id: "1", name: "Welcome", slug: "welcome", color: "#3B82F6" }],
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-  {
-    id: "6",
-    title: "Getting Started with Next.js",
-    slug: "getting-started-nextjs",
-    content: "# Getting Started\n\nNext.js is a powerful React framework...",
-    excerpt: "Learn the basics of Next.js and how to build modern web applications.",
-    published: true,
-    author: {
-      id: "1",
-      name: "Blog Author",
-      image: "/placeholder.svg?height=40&width=40",
-    },
-    tags: [
-      { id: "2", name: "Next.js", slug: "nextjs", color: "#000000" },
-      { id: "3", name: "Tutorial", slug: "tutorial", color: "#4ECDC4" },
-    ],
-    created_at: new Date(Date.now() - 86400000).toISOString(),
-    updated_at: new Date(Date.now() - 86400000).toISOString(),
-  },
-  {
-    id: "7",
-    title: "Understanding React Hooks",
-    slug: "understanding-react-hooks",
-    content: "# React Hooks\n\nHooks let you use state and other React features without writing a class.",
-    excerpt: "A deep dive into React Hooks and how they simplify component logic.",
-    published: true,
-    author: {
-      id: "1",
-      name: "Blog Author",
-      image: "/placeholder.svg?height=40&width=40",
-    },
-    tags: [
-      { id: "4", name: "React", slug: "react", color: "#61DAFB" },
-      { id: "3", name: "Tutorial", slug: "tutorial", color: "#4ECDC4" },
-    ],
-    created_at: new Date(Date.now() - 2 * 86400000).toISOString(),
-    updated_at: new Date(Date.now() - 2 * 86400000).toISOString(),
-  },
-  {
-    id: "8",
-    title: "TypeScript Best Practices",
-    slug: "typescript-best-practices",
-    content: "# TypeScript\n\nUsing TypeScript effectively can improve code quality.",
-    excerpt: "Tips and tricks for writing clean and maintainable TypeScript code.",
-    published: true,
-    author: {
-      id: "1",
-      name: "Blog Author",
-      image: "/placeholder.svg?height=40&width=40",
-    },
-    tags: [
-      { id: "5", name: "TypeScript", slug: "typescript", color: "#3178C6" },
-      { id: "6", name: "Tips", slug: "tips", color: "#45B7D1" },
-    ],
-    created_at: new Date(Date.now() - 3 * 86400000).toISOString(),
-    updated_at: new Date(Date.now() - 3 * 86400000).toISOString(),
-  },
-  {
-    id: "9",
-    title: "Welcome to My Blog",
-    slug: "welcome-to-my-blog",
-    content: "# Welcome\n\nThis is your first blog post!",
-    excerpt: "Welcome to my personal blog where I share thoughts and tutorials.",
-    published: true,
-    author: {
-      id: "1",
-      name: "Blog Author",
-      image: "/placeholder.svg?height=40&width=40",
-    },
-    tags: [{ id: "1", name: "Welcome", slug: "welcome", color: "#3B82F6" }],
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-  {
-    id: "10",
-    title: "Getting Started with Next.js",
-    slug: "getting-started-nextjs",
-    content: "# Getting Started\n\nNext.js is a powerful React framework...",
-    excerpt: "Learn the basics of Next.js and how to build modern web applications.",
-    published: true,
-    author: {
-      id: "1",
-      name: "Blog Author",
-      image: "/placeholder.svg?height=40&width=40",
-    },
-    tags: [
-      { id: "2", name: "Next.js", slug: "nextjs", color: "#000000" },
-      { id: "3", name: "Tutorial", slug: "tutorial", color: "#4ECDC4" },
-    ],
-    created_at: new Date(Date.now() - 86400000).toISOString(),
-    updated_at: new Date(Date.now() - 86400000).toISOString(),
-  },
-  {
-    id: "11",
-    title: "Understanding React Hooks",
-    slug: "understanding-react-hooks",
-    content: "# React Hooks\n\nHooks let you use state and other React features without writing a class.",
-    excerpt: "A deep dive into React Hooks and how they simplify component logic.",
-    published: true,
-    author: {
-      id: "1",
-      name: "Blog Author",
-      image: "/placeholder.svg?height=40&width=40",
-    },
-    tags: [
-      { id: "4", name: "React", slug: "react", color: "#61DAFB" },
-      { id: "3", name: "Tutorial", slug: "tutorial", color: "#4ECDC4" },
-    ],
-    created_at: new Date(Date.now() - 2 * 86400000).toISOString(),
-    updated_at: new Date(Date.now() - 2 * 86400000).toISOString(),
-  },
-  {
-    id: "12",
-    title: "TypeScript Best Practices",
-    slug: "typescript-best-practices",
-    content: "# TypeScript\n\nUsing TypeScript effectively can improve code quality.",
-    excerpt: "Tips and tricks for writing clean and maintainable TypeScript code.",
-    published: true,
-    author: {
-      id: "1",
-      name: "Blog Author",
-      image: "/placeholder.svg?height=40&width=40",
-    },
-    tags: [
-      { id: "5", name: "TypeScript", slug: "typescript", color: "#3178C6" },
-      { id: "6", name: "Tips", slug: "tips", color: "#45B7D1" },
-    ],
-    created_at: new Date(Date.now() - 3 * 86400000).toISOString(),
-    updated_at: new Date(Date.now() - 3 * 86400000).toISOString(),
-  },
-]
-
-// 模拟标签数据 (与之前保持一致)
-const mockTags = [
-  { id: "1", name: "Welcome", slug: "welcome", color: "#3B82F6", created_at: new Date().toISOString() },
-  { id: "2", name: "Next.js", slug: "nextjs", color: "#000000", created_at: new Date().toISOString() },
-  { id: "3", name: "Tutorial", slug: "tutorial", color: "#4ECDC4", created_at: new Date().toISOString() },
-  { id: "4", name: "React", slug: "react", color: "#61DAFB", created_at: new Date().toISOString() },
-  { id: "5", name: "TypeScript", slug: "typescript", color: "#3178C6", created_at: new Date().toISOString() },
-  { id: "6", name: "Tips", slug: "tips", color: "#45B7D1", created_at: new Date().toISOString() },
-]
-
 export default function ArticlesPage() {
   const searchParams = useSearchParams()
   const router = useRouter() // 初始化 useRouter
   const [articles, setArticles] = useState<any[]>([])
-  const [tags, setTags] = useState<any[]>(mockTags) // 使用模拟标签
+  const [tags, setTags] = useState<any[]>([]) // 使用模拟标签
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedTagSlug, setSelectedTagSlug] = useState(searchParams.get("tag") || "all") // 从 URL 读取标签
 
   useEffect(() => {
-    // 模拟获取文章和标签
-    setLoading(true)
-    const filteredByTag =
-      selectedTagSlug === "all"
-        ? mockArticles
-        : mockArticles.filter((article) => article.tags?.some((tag) => tag.slug === selectedTagSlug))
-    setArticles(filteredByTag)
-    setLoading(false)
+    fetchArticles()
+    fetchTags()
+  }, [selectedTagSlug])
 
-    // 实际项目中这里会从 API 获取文章和标签
-    // fetchArticles()
-    // fetchTags()
-  }, [selectedTagSlug]) // 依赖 selectedTagSlug
+  const fetchArticles = async () => {
+    try {
+      setLoading(true)
+      const params = new URLSearchParams()
+      if (selectedTagSlug !== "all") {
+        params.append("tag", selectedTagSlug)
+      }
+
+      const res = await fetch(`/api/articles?${params.toString()}`)
+      if (res.ok) {
+        const data = await res.json()
+        setArticles(data.articles || [])
+      }
+    } catch (error) {
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const fetchTags = async () => {
+    try {
+      const res = await fetch("/api/tags")
+      if (res.ok) {
+        const data = await res.json()
+        setTags(data || [])
+      }
+    } catch (error) {
+    }
+  }
 
   // 处理标签选择变化
   const handleTagChange = (newTagSlug: string) => {

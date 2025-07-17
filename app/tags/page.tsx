@@ -2,23 +2,18 @@ import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { TagIcon } from "lucide-react"
+import type { Tag } from "@/types"
 
-// 模拟标签数据
-const mockTags = [
-  { id: "1", name: "Welcome", slug: "welcome", color: "#3B82F6", created_at: new Date().toISOString() },
-  { id: "2", name: "Next.js", slug: "nextjs", color: "#000000", created_at: new Date().toISOString() },
-  { id: "3", name: "Tutorial", slug: "tutorial", color: "#4ECDC4", created_at: new Date().toISOString() },
-  { id: "4", name: "React", slug: "react", color: "#61DAFB", created_at: new Date().toISOString() },
-  { id: "5", name: "TypeScript", slug: "typescript", color: "#3178C6", created_at: new Date().toISOString() },
-  { id: "6", name: "JavaScript", slug: "javascript", color: "#F7DF1E", created_at: new Date().toISOString() },
-  { id: "7", name: "Web Development", slug: "web-development", color: "#FF6B6B", created_at: new Date().toISOString() },
-  { id: "8", name: "Tips", slug: "tips", color: "#45B7D1", created_at: new Date().toISOString() },
-  { id: "9", name: "Performance", slug: "performance", color: "#96CEB4", created_at: new Date().toISOString() },
-]
+async function getTags(): Promise<Tag[]> {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/api/tags`)
 
-async function getTags() {
-  // 模拟从 API 获取标签数据
-  return mockTags
+    if (!res.ok) return []
+
+    return res.json()
+  } catch {
+    return []
+  }
 }
 
 export default async function TagsPage() {

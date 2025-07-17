@@ -11,65 +11,42 @@ import { Separator } from "@/components/ui/separator"
 // import { CommentSection } from "@/components/comment-section" // Uncomment when database is integrated
 import { markdownToHtml } from "@/lib/markdown"
 
-// Mock data for articles and tags
-export const mockTags = [
-  { id: "1", name: "Welcome", slug: "welcome", color: "#3B82F6", created_at: new Date().toISOString() },
-  { id: "2", name: "Next.js", slug: "nextjs", color: "#000000", created_at: new Date().toISOString() },
-  { id: "3", name: "Tutorial", slug: "tutorial", color: "#4ECDC4", created_at: new Date().toISOString() },
-  { id: "4", name: "React", slug: "react", color: "#61DAFB", created_at: new Date().toISOString() },
-  { id: "5", name: "TypeScript", slug: "typescript", color: "#3178C6", created_at: new Date().toISOString() },
-]
-
-export const mockArticles = [
-  {
-    id: "1",
-    title: "Welcome to My Blog",
-    slug: "welcome-to-my-blog",
-    content:
-      "# Welcome\n\nThis is your first blog post! It's written in Markdown.\n\n## Features\n\n- **Responsive Design**: Adapts to various screen sizes.\n- **Authentication**: Secure login with NextAuth.js.\n- **Admin Dashboard**: Manage articles with CRUD operations.\n\nEnjoy exploring!",
-    excerpt: "Welcome to my personal blog where I share thoughts and tutorials.",
-    published: true,
-    author: {
-      id: "1",
-      name: "Blog Author",
-      image: "/placeholder.svg?height=40&width=40",
-    },
-    tags: [{ id: "1", name: "Welcome", slug: "welcome", color: "#3B82F6" }],
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-    featured_image: "/placeholder.svg?height=600&width=1200",
-  },
-  {
-    id: "2",
-    title: "Getting Started with Next.js",
-    slug: "getting-started-nextjs",
-    content:
-      "# Getting Started\n\nNext.js is a powerful React framework...\n\n- Item 1\n- Item 2\n\n```python\nprint('Hello from Python')\n```",
-    excerpt: "Learn the basics of Next.js and how to build modern web applications.",
-    published: true,
-    author: {
-      id: "1",
-      name: "Blog Author",
-      image: "/placeholder.svg?height=40&width=40",
-    },
-    tags: [
-      { id: "2", name: "Next.js", slug: "nextjs", color: "#000000" },
-      { id: "3", name: "Tutorial", slug: "tutorial", color: "#4ECDC4" },
-    ],
-    created_at: new Date(Date.now() - 86400000).toISOString(),
-    updated_at: new Date(Date.now() - 86400000).toISOString(),
-    featured_image: "/placeholder.svg?height=600&width=1200",
-  },
-]
-
 interface ArticlePageProps {
   params: { slug: string }
 }
 
 async function getArticle(slug: string) {
-  // 模拟从 API 获取文章数据
-  const article = mockArticles.find((a) => a.slug === slug)
-  return article || null
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/api/articles/${slug}`, {
+      next: { revalidate: 3600 }, // ISR
+    })
+
+    if (!res.ok) return null
+
+    return res.json()
+  } catch {
+    return null
+  }
+}
+
+export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
+  const article = await getArticle(params.slug)
+
+  if (!article) {
+    return {
+      title: "Article Not Found",
+    }
+  }
+
+  return {
+    title: article.title,
+    description: article.excerpt,
+    openGraph: {
+      title: article.title,
+      description: article.excerpt || "",
+      images: article.featured_image ? [article.featured_image] : [],
+    },
+  }
 }
 
 export default async function ArticlePage({ params }: ArticlePageProps) {
@@ -107,7 +84,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           )}
 
           <div className="flex flex-wrap gap-2 mb-4">
-            {article.tags?.map((tag) => (
+            {article.tags?.map((tag: { id: string | number; name: string; slug: string; color: string }) => (
               <Badge key={tag.id} variant="secondary" style={{ backgroundColor: `${tag.color}20`, color: tag.color }}>
                 <Link
                   href={`/articles?tag=${tag.slug}`}

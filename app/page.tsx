@@ -11,14 +11,12 @@ async function getLatestArticles() {
     })
 
     if (!res.ok) {
-      console.error("Failed to fetch articles:", res.status)
       return []
     }
 
     const data = await res.json()
     return data.articles || []
   } catch (error) {
-    console.error("Error fetching articles:", error)
     return []
   }
 }
@@ -30,13 +28,11 @@ async function getPopularTags() {
     })
 
     if (!res.ok) {
-      console.error("Failed to fetch tags:", res.status)
       return []
     }
 
     return await res.json()
   } catch (error) {
-    console.error("Error fetching tags:", error)
     return []
   }
 }

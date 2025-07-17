@@ -1,7 +1,7 @@
 "use client"
 
-import type React from "react"
-import { useState } from "react"
+import React from "react"
+import { useState, useEffect, use } from "react"
 import { Suspense } from "react"
 import { notFound } from "next/navigation"
 import { useRouter } from "next/navigation"
@@ -13,30 +13,61 @@ import { Switch } from "@/components/ui/switch"
 import { Badge } from "@/components/ui/badge"
 import { MarkdownEditor } from "@/components/markdown-editor"
 import { X } from "lucide-react"
-import { mockTags, mockArticles } from "@/app/articles/[slug]/page"
+import type { Tag, Article } from "@/types"
 
 interface EditArticlePageProps {
-  params: { slug: string }
+  params: Promise<{ id: string }>
 }
 
 export default function EditArticleClientPage({ params }: EditArticlePageProps) {
+  const { id } = use(params)
   const router = useRouter()
+  const [article, setArticle] = useState<Article | null>(null)
+  const [title, setTitle] = useState("")
+  const [content, setContent] = useState("")
+  const [published, setPublished] = useState(false)
+  const [selectedTags, setSelectedTags] = useState<string[]>([])
+  const [availableTags, setAvailableTags] = useState<Tag[]>([])
+  const [loading, setLoading] = useState(true)
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
-  // In a real application, you would fetch the article from your database here
-  const article = mockArticles.find((a) => a.slug === params.slug)
+  useEffect(() => {
+    fetchArticle()
+    fetchTags()
+  }, [id])
 
-  if (!article) {
-    notFound()
+  const fetchArticle = async () => {
+    try {
+      const res = await fetch(`/api/articles/${id}`)
+      if (res.ok) {
+        const articleData = await res.json()
+        console.log('xx', articleData)
+        setArticle(articleData)
+        setTitle(articleData.title)
+        setContent(articleData.content)
+        setPublished(articleData.published)
+        setSelectedTags(articleData.tags?.split(','))
+      } else {
+        notFound()
+      }
+    } catch (error) {
+      setError("Failed to load article")
+    } finally {
+      setLoading(false)
+    }
   }
 
-  const [title, setTitle] = useState(article.title)
-  const [content, setContent] = useState(article.content)
-  const [published, setPublished] = useState(article.published)
-  const [selectedTags, setSelectedTags] = useState<string[]>(article.tags?.map((tag: any) => tag.id) || [])
-  const [availableTags, setAvailableTags] = useState<any[]>(mockTags) // 使用模拟标签
-  const [loading, setLoading] = useState(false) // This state is not used here as loading is handled by parent SC
-  const [submitting, setSubmitting] = useState(false)
-  const [error, setError] = useState<string | null>(null) // This state is not used here as error is handled by parent SC
+  const fetchTags = async () => {
+    try {
+      const res = await fetch("/api/tags")
+      if (res.ok) {
+        const tags = await res.json()
+        setAvailableTags(tags)
+      }
+    } catch (error) {
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -44,12 +75,22 @@ export default function EditArticleClientPage({ params }: EditArticlePageProps) 
     setError(null)
 
     try {
-      // 模拟文章更新
-      console.log("Updating article (simulated):", { title, content, published, tags: selectedTags })
-      await new Promise((resolve) => setTimeout(resolve, 1000)) // 模拟网络请求
+      const res = await fetch(`/api/articles/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title,
+          content,
+          published,
+          tags: selectedTags,
+        }),
+      })
 
-      // 模拟成功后跳转
-      router.push(`/admin/articles`)
+      if (res.ok) {
+        router.push(`/articles/${id}`)
+      } else {
+        throw new Error("Failed to update article")
+      }
     } catch (err: any) {
       setError(err.message || "Failed to update article.")
     } finally {
@@ -59,6 +100,24 @@ export default function EditArticleClientPage({ params }: EditArticlePageProps) 
 
   const toggleTag = (tagId: string) => {
     setSelectedTags((prev) => (prev.includes(tagId) ? prev.filter((id) => id !== tagId) : [...prev, tagId]))
+  }
+
+  if (loading) {
+    return (
+      <div className="container py-8">
+        <div className="max-w-4xl mx-auto h-96 bg-muted animate-pulse rounded-lg shadow-custom-md" />
+      </div>
+    )
+  }
+
+  if (error || !article) {
+    return (
+      <div className="container py-8">
+        <div className="text-center">
+          <p className="text-red-500">{error || "Article not found"}</p>
+        </div>
+      </div>
+    )
   }
 
   return (

@@ -32,7 +32,6 @@ export function CommentSection({ articleId }: CommentSectionProps) {
       const data = await res.json()
       setComments(data)
     } catch (error) {
-      console.error("Failed to fetch comments:", error)
     } finally {
       setLoading(false)
     }
@@ -60,7 +59,6 @@ export function CommentSection({ articleId }: CommentSectionProps) {
         setNewComment("")
       }
     } catch (error) {
-      console.error("Failed to submit comment:", error)
     } finally {
       setSubmitting(false)
     }

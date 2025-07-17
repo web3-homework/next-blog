@@ -27,24 +27,26 @@ interface ArticleActionsProps {
 }
 
 export function ArticleActions({ article }: ArticleActionsProps) {
+  console.log('article', article)
   const [deleting, setDeleting] = useState(false)
   const router = useRouter()
 
   const handleDelete = async () => {
     setDeleting(true)
     try {
-      // In a real application, you would call your API to delete the article
-      // const res = await fetch(`/api/articles/${article.slug}`, { method: "DELETE" });
-      // if (!res.ok) {
-      //   throw new Error("Failed to delete article");
-      // }
-      await new Promise((resolve) => setTimeout(resolve, 500)) // Simulate API call
+      const res = await fetch(`/api/articles/${article.id}`, {
+        method: "DELETE",
+      })
+
+      if (!res.ok) {
+        throw new Error("Failed to delete article")
+      }
 
       toast({
         title: "Article Deleted",
         description: `Article "${article.title}" has been deleted.`,
       })
-      router.refresh() // Refresh the page to update the article list
+      router.refresh()
     } catch (error: any) {
       toast({
         title: "Error",
@@ -59,7 +61,7 @@ export function ArticleActions({ article }: ArticleActionsProps) {
   return (
     <div className="flex justify-end gap-2">
       <Button variant="outline" size="sm" asChild>
-        <Link href={`/admin/articles/${article.slug}/edit`}>
+        <Link href={`/admin/articles/${article.id}/edit`}>
           <Edit className="h-4 w-4" />
           <span className="sr-only">Edit</span>
         </Link>
