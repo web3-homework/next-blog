@@ -1,23 +1,25 @@
+"use client"
+
 import { notFound } from "next/navigation"
+import { use, useEffect, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import type { Metadata } from "next"
 import { ArrowLeft, Calendar, User } from "lucide-react"
-
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Separator } from "@/components/ui/separator"
-// import { CommentSection } from "@/components/comment-section" // Uncomment when database is integrated
+import { CommentSection } from "@/components/comment-section" 
 import { markdownToHtml } from "@/lib/markdown"
+import type { Tag, Article } from "@/types"
 
 interface ArticlePageProps {
-  params: { slug: string }
+  params: Promise<{ id: string }>
 }
 
-async function getArticle(slug: string) {
+async function getArticle(id: string) {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/api/articles/${slug}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/api/articles/${id}`, {
       next: { revalidate: 3600 }, // ISR
     })
 
@@ -29,34 +31,26 @@ async function getArticle(slug: string) {
   }
 }
 
-export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
-  const article = await getArticle(params.slug)
+export default function ArticlePage({ params }: ArticlePageProps) {
+  const { id } = use(params)
+  console.log('ArticlePage', id)
 
-  if (!article) {
-    return {
-      title: "Article Not Found",
+  const [ article, setArticle ] = useState<Article | null>(null)
+  const [ content, setContent ] = useState<string>('')
+
+  useEffect(() => {
+    fetchArticle()
+  }, [id])
+
+  const fetchArticle = async () => {
+    const article = await getArticle(id)
+    if (!article) {
+      notFound()
     }
+    setArticle(article) 
+    const content = await markdownToHtml(article.content)
+    setContent(content)
   }
-
-  return {
-    title: article.title,
-    description: article.excerpt,
-    openGraph: {
-      title: article.title,
-      description: article.excerpt || "",
-      images: article.featured_image ? [article.featured_image] : [],
-    },
-  }
-}
-
-export default async function ArticlePage({ params }: ArticlePageProps) {
-  const article = await getArticle(params.slug)
-
-  if (!article) {
-    notFound()
-  }
-
-  const content = await markdownToHtml(article.content)
 
   return (
     <div className="container py-8">
@@ -68,11 +62,9 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       </Button>
 
       <article className="max-w-4xl mx-auto">
-        {/* Article Header */}
         <header className="mb-8">
-          {article.featured_image && (
+          {article && article.featured_image && (
             <div className="relative h-64 md:h-96 w-full mb-8 rounded-lg overflow-hidden shadow-custom-md">
-              {/* 添加阴影 */}
               <Image
                 src={article.featured_image || "/placeholder.svg"}
                 alt={article.title}
@@ -84,35 +76,34 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           )}
 
           <div className="flex flex-wrap gap-2 mb-4">
-            {article.tags?.map((tag: { id: string | number; name: string; slug: string; color: string }) => (
+            {article && article.tags?.map((tag: { id: string | number; name: string; slug: string; color: string }) => (
               <Badge key={tag.id} variant="secondary" style={{ backgroundColor: `${tag.color}20`, color: tag.color }}>
                 <Link
                   href={`/articles?tag=${tag.slug}`}
                   className="transition-colors hover:bg-primary hover:text-primary-foreground"
                 >
-                  {/* 添加悬停效果 */}
                   {tag.name}
                 </Link>
               </Badge>
             ))}
           </div>
 
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">{article.title}</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-6">{article?.title}</h1>
 
           <div className="flex items-center justify-between text-muted-foreground mb-8">
             <div className="flex items-center space-x-4">
               <Avatar className="h-10 w-10">
-                <AvatarImage src={article.author?.image || ""} />
+                <AvatarImage src={article?.author?.image || ""} />
                 <AvatarFallback>
                   <User className="h-5 w-5" />
                 </AvatarFallback>
               </Avatar>
               <div>
-                <p className="font-medium text-foreground">{article.author?.name}</p>
+                <p className="font-medium text-foreground">{article?.author?.name}</p>
                 <div className="flex items-center space-x-1 text-sm">
                   <Calendar className="h-4 w-4" />
                   <span>
-                    {new Date(article.created_at).toLocaleDateString("en-US", {
+                    {article && new Date(article.created_at).toLocaleDateString("en-US", {
                       year: "numeric",
                       month: "long",
                       day: "numeric",
@@ -124,7 +115,6 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           </div>
         </header>
 
-        {/* Article Content */}
         <div className="prose prose-lg max-w-none mb-12" dangerouslySetInnerHTML={{ __html: content }} />
 
         <Separator className="my-8" />

@@ -82,12 +82,12 @@ export default function EditArticleClientPage({ params }: EditArticlePageProps) 
           title,
           content,
           published,
-          tags: selectedTags,
+          tags: selectedTags.join(','),
         }),
       })
 
       if (res.ok) {
-        router.push(`/articles/${id}`)
+        router.push(`/admin/articles`)
       } else {
         throw new Error("Failed to update article")
       }

@@ -54,7 +54,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
           ))}
         </div>
 
-        <Link href={`/articles/${article.slug}`}>
+        <Link href={`/articles/${article.id}`}>
           <h3 className="text-xl font-semibold line-clamp-2 hover:text-primary transition-colors">{article.title}</h3>
         </Link>
       </CardHeader>

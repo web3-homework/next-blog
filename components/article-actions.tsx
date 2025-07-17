@@ -27,7 +27,6 @@ interface ArticleActionsProps {
 }
 
 export function ArticleActions({ article }: ArticleActionsProps) {
-  console.log('article', article)
   const [deleting, setDeleting] = useState(false)
   const router = useRouter()
 

@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useSearchParams, useRouter } from "next/navigation" // 引入 useRouter
 import { ArticleCard } from "@/components/article-card"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
@@ -9,31 +8,35 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Search, Filter } from "lucide-react"
 
 export default function ArticlesPage() {
-  const searchParams = useSearchParams()
-  const router = useRouter() // 初始化 useRouter
   const [articles, setArticles] = useState<any[]>([])
-  const [tags, setTags] = useState<any[]>([]) // 使用模拟标签
+  const [tags, setTags] = useState<any[]>([]) 
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState("")
-  const [selectedTagSlug, setSelectedTagSlug] = useState(searchParams.get("tag") || "all") // 从 URL 读取标签
+  const [selectedTagSlug, setSelectedTagSlug] = useState("all") 
+  const [filteredArticles, setFilteredArticles] = useState<any[]>([])
 
   useEffect(() => {
     fetchArticles()
     fetchTags()
-  }, [selectedTagSlug])
+  }, [])
+
+  useEffect(() => {
+    let data = []
+    if (selectedTagSlug === "all") {
+      data = articles
+    } else {
+      data = articles.filter((article) => article.tags?.some((tag: any) => tag.slug === selectedTagSlug))
+    }
+    setFilteredArticles(data)
+  }, [articles, selectedTagSlug])
 
   const fetchArticles = async () => {
     try {
       setLoading(true)
-      const params = new URLSearchParams()
-      if (selectedTagSlug !== "all") {
-        params.append("tag", selectedTagSlug)
-      }
-
-      const res = await fetch(`/api/articles?${params.toString()}`)
+      const res = await fetch(`/api/articles`)
       if (res.ok) {
         const data = await res.json()
-        setArticles(data.articles || [])
+        setArticles(data || [])
       }
     } catch (error) {
     } finally {
@@ -54,22 +57,11 @@ export default function ArticlesPage() {
 
   // 处理标签选择变化
   const handleTagChange = (newTagSlug: string) => {
+    console.log('newTagSlug', newTagSlug)
     setSelectedTagSlug(newTagSlug)
-    // 更新 URL 查询参数
-    const currentParams = new URLSearchParams(searchParams.toString())
-    if (newTagSlug === "all") {
-      currentParams.delete("tag")
-    } else {
-      currentParams.set("tag", newTagSlug)
-    }
-    router.push(`/articles?${currentParams.toString()}`)
   }
 
-  const filteredBySearch = articles.filter(
-    (article) =>
-      article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      article.excerpt?.toLowerCase().includes(searchTerm.toLowerCase()),
-  )
+  const filteredBySearch = articles.filter((article) => article.title.toLowerCase().includes(searchTerm.toLowerCase()))
 
   const currentTagName = selectedTagSlug !== "all" ? tags.find((t) => t.slug === selectedTagSlug)?.name : null
 
@@ -132,13 +124,13 @@ export default function ArticlesPage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredBySearch.map((article) => (
+          {filteredArticles.map((article) => (
             <ArticleCard key={article.id} article={article} />
           ))}
         </div>
       )}
 
-      {!loading && filteredBySearch.length === 0 && (
+      {!loading && filteredArticles.length === 0 && (
         <div className="text-center py-12">
           <p className="text-muted-foreground">No articles found matching your criteria.</p>
         </div>

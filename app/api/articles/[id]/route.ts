@@ -12,13 +12,34 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     .select('*')
     .eq("id", id)
     .single()
+
+  const { data: tags } = await supabase
+    .from('tags')
+    .select('*')
+
+  const tagIds = article.tags.split(',')
+  const tagsList = tagIds.map((tagId: string) => {
+    const tag = tags ? tags.find((tag) => tag.id === tagId) : null
+    return {
+      id: tag.id,
+      name: tag.name,
+      slug: tag.slug
+    }
+  })
+
+
   if (error || !article) {
     return NextResponse.json({ error: "Article not found" }, { status: 404 })
   }
-  return NextResponse.json(article)
+  return NextResponse.json({
+    ...article,
+      tags: tagsList
+  })
 }
 
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = await params; 
+  const { id } = resolvedParams; 
   const session = await getServerSession(authOptions)
 
   if (!session?.user || session.user.role !== "admin") {
@@ -27,7 +48,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 
   try {
     const body = await request.json()
-    const { title, content, published, tags = [] } = body
+    const { title, content, published, tags } = body
 
     const { data: article, error: updateError } = await supabase
       .from("articles")
@@ -35,27 +56,12 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
         title,
         content,
         published,
+        tags,
         updated_at: new Date().toISOString(),
       })
-      .eq("id", params.id)
+      .eq("id", id)
       .select()
       .single()
-
-    if (updateError) {
-      return NextResponse.json({ error: updateError.message }, { status: 500 })
-    }
-
-    // Update tags
-    await supabase.from("article_tags").delete().eq("article_id", article.id)
-
-    if (tags.length > 0) {
-      const tagRelations = tags.map((tagId: string) => ({
-        article_id: article.id,
-        tag_id: tagId,
-      }))
-
-      await supabase.from("article_tags").insert(tagRelations)
-    }
 
     return NextResponse.json(article)
   } catch (error) {
@@ -63,14 +69,16 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
   }
 }
 
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = await params; 
+  const { id } = resolvedParams; 
   const session = await getServerSession(authOptions)
 
   if (!session?.user || session.user.role !== "admin") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  const { error } = await supabase.from("articles").delete().eq("id", params.id)
+  const { error } = await supabase.from("articles").delete().eq("id", id)
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 })

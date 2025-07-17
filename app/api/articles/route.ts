@@ -23,7 +23,8 @@ export async function GET() {
         const tag = tags ? tags.find((tag) => tag.id === tagId) : null
         return {
           id: tag.id,
-          name: tag.name
+          name: tag.name,
+          slug: tag.slug
         }
       })
       return {
