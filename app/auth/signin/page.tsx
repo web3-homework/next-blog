@@ -5,7 +5,7 @@ import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Github, Mail, Lock } from "lucide-react"
-import { useSearchParams } from "next/navigation"
+import { useSearchParams, useRouter, redirect } from "next/navigation"
 import {
   Dialog,
   DialogContent,
@@ -17,14 +17,22 @@ import {
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { toast } from "@/components/ui/use-toast"
+import { useSession } from "next-auth/react"
 
 export default function SignInPage() {
+  const { data: session } = useSession()
+  const router = useRouter()
   const [providers, setProviders] = useState<any>(null)
   const [password, setPassword] = useState("")
   const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(false)
 
   const searchParams = useSearchParams()
   const callbackUrl = searchParams.get("callbackUrl") || "/admin/articles"
+  useEffect(() => {
+    if (session && session.user?.role == "admin") {
+      redirect("/admin/articles")
+    }
+  }, [session])
 
   useEffect(() => {
     const fetchProviders = async () => {
@@ -51,7 +59,7 @@ export default function SignInPage() {
         variant: "destructive",
       })
     } else {
-      window.location.href = callbackUrl
+      router.push(callbackUrl)
     }
     setIsPasswordDialogOpen(false)
     setPassword("") // Clear password field

@@ -1,6 +1,5 @@
 "use client"
 
-import { use } from "react"
 import { redirect } from "next/navigation"
 import EditArticleClientPage from "./EditArticleClientPage"
 import { useSession } from "next-auth/react"

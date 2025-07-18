@@ -42,12 +42,13 @@ export default function EditArticleClientPage({ params }: EditArticlePageProps) 
       const res = await fetch(`/api/articles/${id}`)
       if (res.ok) {
         const articleData = await res.json()
-        console.log('xx', articleData)
         setArticle(articleData)
         setTitle(articleData.title)
         setContent(articleData.content)
         setPublished(articleData.published)
-        setSelectedTags(articleData.tags?.split(','))
+        const tags = articleData.tags.map((tag: Tag) => tag.id)
+        console.log('tags', tags)
+        setSelectedTags(tags)
       } else {
         notFound()
       }

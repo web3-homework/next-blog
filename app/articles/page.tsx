@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Search, Filter } from "lucide-react"
+import { LoadingAnimation } from "@/components/loading-animation"
 
 export default function ArticlesPage() {
   const [articles, setArticles] = useState<any[]>([])
@@ -57,7 +58,6 @@ export default function ArticlesPage() {
 
   // 处理标签选择变化
   const handleTagChange = (newTagSlug: string) => {
-    console.log('newTagSlug', newTagSlug)
     setSelectedTagSlug(newTagSlug)
   }
 
@@ -114,14 +114,9 @@ export default function ArticlesPage() {
           </Badge>
         </div>
       )}
-
-      {/* Articles Grid */}
-      {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="h-96 bg-muted animate-pulse rounded-lg shadow-custom-md" />
-          ))}
-        </div>
+      {
+      loading ? (
+        <LoadingAnimation />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredArticles.map((article) => (

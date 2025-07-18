@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   title: "My Personal Blog",
   description: "A modern blog built with Next.js, Supabase, and NextAuth.js",
   keywords: ["blog", "Next.js", "React", "TypeScript", "Web Development"],
-  authors: [{ name: "Your Name" }],
+  authors: [{ name: "Jason.Zhang" }],
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -20,12 +20,7 @@ export const metadata: Metadata = {
     title: "My Personal Blog",
     description: "A modern blog built with Next.js, Supabase, and NextAuth.js",
   },
-  twitter: {
-    card: "summary_large_image",
-    title: "My Personal Blog",
-    description: "A modern blog built with Next.js, Supabase, and NextAuth.js",
-  },
-    generator: 'v0.dev'
+  generator: 'v0.dev'
 }
 
 export default function RootLayout({

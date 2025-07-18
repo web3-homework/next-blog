@@ -16,11 +16,8 @@ export default function AdminArticlesPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const [articles, setArticles] = useState<Article[]>([])
-  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (status === "loading") return
-
     if (session?.user?.role !== "admin") {
       router.push("/")
       return
@@ -37,23 +34,12 @@ export default function AdminArticlesPage() {
         setArticles(data || [])
       }
     } catch (error) {
-    } finally {
-      setLoading(false)
     }
-  }
-
-  if (status === "loading" || session?.user?.role !== "admin") {
-    return (
-      <div className="container py-8">
-        <div className="max-w-6xl mx-auto h-96 bg-muted animate-pulse rounded-lg" />
-      </div>
-    )
   }
 
   return (
     <div className="container py-8">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold">Articles</h1>
         <Button asChild>
           <Link href="/admin/articles/new">
             <PlusCircle className="mr-2 h-4 w-4" />

@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server"
 import { supabase } from "@/lib/supabase"
 import { v4 as uuidv4 } from "uuid"
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/lib/auth"
 
 export async function GET() {
   try {
@@ -40,7 +42,26 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  const session = await getServerSession(authOptions)
+
+  if (!session?.user || session.user.role !== "admin") {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+  }
+
   try {
+    // 检查数据库存储数量
+    const { count: articleCount } = await supabase
+      .from('articles')
+      .select('id', { count: 'exact', head: true });
+
+    // 2. 超过10条时返回错误
+    if (articleCount && articleCount >= 10) {
+      return NextResponse.json(
+        { error: 'Maximum article limit reached (10 articles). Cannot add new articles.' },
+        { status: 403 }
+      );
+    }
+
     const { title, content, published, featured_image, tags } = await request.json()
 
     // 验证必要字段

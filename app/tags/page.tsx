@@ -22,15 +22,13 @@ export default async function TagsPage() {
   return (
     <div className="container py-8">
       <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-4">Topics</h1>
+        <h1 className="text-4xl font-bold mb-4">Tags</h1>
         <p className="text-muted-foreground">Explore articles by topic and find content that interests you.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {tags.map((tag) => (
           <Card key={tag.id} className="hover:shadow-custom-md transition-shadow">
-            
-            {/* 增强悬停效果 */}
             <CardHeader className="pb-3">
               <div className="flex items-center space-x-2">
                 <TagIcon className="h-5 w-5" style={{ color: tag.color }} />
@@ -41,10 +39,8 @@ export default async function TagsPage() {
               <Badge variant="secondary" style={{ backgroundColor: `${tag.color}20`, color: tag.color }}>
                 <Link
                   href={`/articles?tag=${tag.slug}`}
-                  className="cursor-pointer transition-colors hover:bg-primary hover:text-primary-foreground"
+                  className="cursor-pointer transition-colors"
                 >
-                  
-                  {/* 添加悬停效果 */}
                   View Articles
                 </Link>
               </Badge>
