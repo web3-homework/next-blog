@@ -55,6 +55,7 @@ async function getArticle(id: string) {
 
 // 服务器组件 - 无"use client"指令
 export default async function ArticlePage({ params }: { params: Promise<{ id: string }> }) {
+  const idx = Math.trunc(Math.random() * 10)
   const resolvedParams = await params; 
   const { id } = resolvedParams; 
   const article = await getArticle(id);
@@ -79,7 +80,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
         <header className="mb-8">
           <div className="relative h-64 md:h-96 w-full mb-8 rounded-lg overflow-hidden shadow-custom-md">
             <Image
-              src={article.featured_image || "/placeholder.jpg"}
+              src={article.featured_image || `/placeholder${idx}.jpg`}
               alt={article.title}
               fill
               className="object-cover"
