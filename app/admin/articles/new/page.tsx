@@ -45,6 +45,7 @@ export default function NewArticlePage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
+    const idx = Math.trunc(Math.random() * 10)
 
     try {
       const res = await fetch("/api/articles", {
@@ -54,6 +55,7 @@ export default function NewArticlePage() {
           title,
           content,
           published,
+          featured_image: `/placeholder${idx}.jpg`,
           tags: selectedTags.join(','),
         }),
       })

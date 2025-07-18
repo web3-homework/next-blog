@@ -85,7 +85,7 @@ export default function AdminArticlesPage() {
                       </div>
                     </TableCell>
                     <TableCell className="text-right">
-                      <ArticleActions article={article} />
+                      <ArticleActions article={article} fn={fetchArticles}/>
                     </TableCell>
                   </TableRow>
                 ))}

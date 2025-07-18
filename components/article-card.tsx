@@ -29,12 +29,11 @@ interface ArticleCardProps {
 }
 
 export function ArticleCard({ article, index }: ArticleCardProps) {
-  const idx = index % 10
   return (
     <Card className="h-full overflow-hidden transition-all duration-300 ease-in-out hover:shadow-custom-lg hover:-translate-y-1">
       <div className="relative h-48 w-full">
         <Image
-          src={article.featured_image || `/placeholder${idx}.jpg`}
+          src={article.featured_image || "/placeholder.svg"}
           alt={article.title}
           fill
           className="object-cover"

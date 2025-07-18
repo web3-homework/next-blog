@@ -2,6 +2,13 @@
 
 A modern, full-featured personal blog built with Next.js 14, Supabase, NextAuth.js, and shadcn/ui.
 
+## Getting Started
+You can log in with the password "123" for a trial. The limit for the number of articles is 10.
+https://github.com/zxytt/next-blog/blob/main/public/sign.png
+
+## Performance
+https://github.com/zxytt/next-blog/blob/main/public/performance.png
+
 ## Features
 
 ### 🔐 Authentication System

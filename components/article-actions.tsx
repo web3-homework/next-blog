@@ -23,10 +23,11 @@ interface ArticleActionsProps {
     id: string
     slug: string
     title: string
-  }
+  },
+  fn: () => void
 }
 
-export function ArticleActions({ article }: ArticleActionsProps) {
+export function ArticleActions({ article, fn }: ArticleActionsProps) {
   const [deleting, setDeleting] = useState(false)
   const router = useRouter()
 
@@ -45,6 +46,7 @@ export function ArticleActions({ article }: ArticleActionsProps) {
         title: "Article Deleted",
         description: `Article "${article.title}" has been deleted.`,
       })
+      fn()
       router.refresh()
     } catch (error: any) {
       toast({

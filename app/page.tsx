@@ -40,7 +40,7 @@ export default async function HomePage() {
 
   return (
     <div className="container py-8">
-      <section className="text-center py-16 md:py-24 bg-gradient-to-b from-background to-muted/20 rounded-lg">
+      <section className="text-center py-12 md:py-8 bg-gradient-to-b from-background to-muted/20 rounded-lg">
         <div className="max-w-3xl mx-auto px-4">
           <PenTool className="h-16 w-16 mx-auto mb-6 text-primary animate-bounce-slow" />
           <h1 className="text-4xl md:text-6xl font-extrabold mb-6 leading-tight">Welcome to My Blog</h1>
@@ -74,7 +74,7 @@ export default async function HomePage() {
             </Link>
           </Button>
         </div>
-        {articles.length > 0 ? (
+        {articles && articles.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {articles.map((article: any, index: number) => (
               <ArticleCard key={article.id} article={article} index={index}/>
