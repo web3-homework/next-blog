@@ -10,12 +10,12 @@ export const metadata: Metadata = meta
 
 async function getLatestArticles() {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/api/articles`)
-
-    if (!res.ok) {
-      return []
+    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/api/articles`, {
+      cache: 'no-store',
+    })
+    if (res.ok) {
+      return (await res.json() || []).slice(0, 3)
     }
-    return (await res.json() || []).slice(0, 3)
   } catch (error) {
     return []
   }
@@ -40,7 +40,7 @@ export default async function HomePage() {
 
   return (
     <div className="container py-8">
-      <section className="text-center py-16 md:py-24 mb-12 bg-gradient-to-b from-background to-muted/20 rounded-lg">
+      <section className="text-center py-16 md:py-24 bg-gradient-to-b from-background to-muted/20 rounded-lg">
         <div className="max-w-3xl mx-auto px-4">
           <PenTool className="h-16 w-16 mx-auto mb-6 text-primary animate-bounce-slow" />
           <h1 className="text-4xl md:text-6xl font-extrabold mb-6 leading-tight">Welcome to My Blog</h1>
@@ -65,7 +65,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="mb-12 py-8">
+      <section className="py-8">
         <div className="flex items-center justify-between mb-8">
           <h2 className="text-3xl font-bold">Latest Articles</h2>
           <Button variant="outline" asChild className="transition-colors hover:text-primary bg-transparent">
@@ -76,8 +76,8 @@ export default async function HomePage() {
         </div>
         {articles.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {articles.map((article: any) => (
-              <ArticleCard key={article.id} article={article} />
+            {articles.map((article: any, index: number) => (
+              <ArticleCard key={article.id} article={article} index={index}/>
             ))}
           </div>
         ) : (

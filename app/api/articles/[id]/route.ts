@@ -4,12 +4,6 @@ import { authOptions } from "@/lib/auth"
 import { supabase } from "@/lib/supabase"
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const session = await getServerSession(authOptions)
-
-  if (!session?.user || session.user.role !== "admin") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-  }
-
   try {
     const resolvedParams = await params; 
     const { id } = resolvedParams; 

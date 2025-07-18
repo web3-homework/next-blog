@@ -12,8 +12,10 @@ import { markdownToHtml } from '@/lib/markdown';
 import { supabase } from '@/lib/supabase';
 
 // 定义页面元数据，实现SEO优化
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-  const article = await getArticle(params.id);
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const resolvedParams = await params; 
+  const { id } = resolvedParams; 
+  const article = await getArticle(id);
 
   if (!article) {
     return {
@@ -43,9 +45,7 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
 // 服务器端数据获取函数
 async function getArticle(id: string) {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/api/articles/${id}`, {
-      next: { revalidate: 3600 }, // ISR
-    })
+    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/api/articles/${id}`,)
 
     if (!res.ok) return null
 
@@ -54,8 +54,10 @@ async function getArticle(id: string) {
 }
 
 // 服务器组件 - 无"use client"指令
-export default async function ArticlePage({ params }: { params: { id: string } }) {
-  const article = await getArticle(params.id);
+export default async function ArticlePage({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = await params; 
+  const { id } = resolvedParams; 
+  const article = await getArticle(id);
 
   if (!article) {
     notFound();
@@ -75,24 +77,22 @@ export default async function ArticlePage({ params }: { params: { id: string } }
 
       <article className="max-w-4xl mx-auto">
         <header className="mb-8">
-          {article.featured_image && (
-            <div className="relative h-64 md:h-96 w-full mb-8 rounded-lg overflow-hidden shadow-custom-md">
-              <Image
-                src={article.featured_image || "/placeholder.svg"}
-                alt={article.title}
-                fill
-                className="object-cover"
-                priority
-              />
-            </div>
-          )}
+          <div className="relative h-64 md:h-96 w-full mb-8 rounded-lg overflow-hidden shadow-custom-md">
+            <Image
+              src={article.featured_image || "/placeholder.jpg"}
+              alt={article.title}
+              fill
+              className="object-cover"
+              priority
+            />
+          </div>
 
           <div className="flex flex-wrap gap-2 mb-4">
             {article.tags?.map((tag: any) => (
               <Badge key={tag.id} variant="secondary" style={{ backgroundColor: `${tag.color}20`, color: tag.color }}>
                 <Link
                   href={`/articles?tag=${tag.slug}`}
-                  className="transition-colors hover:bg-primary hover:text-primary-foreground"
+                  className="transition-colors"
                 >
                   {tag.name}
                 </Link>
