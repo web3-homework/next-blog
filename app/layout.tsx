@@ -32,6 +32,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script defer src="https://umami-five-iota.vercel.app/script.js" data-website-id="4bde982b-4a1d-4dfc-86c2-82119b34e1ad"></script>
+      </head>
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <Providers>
