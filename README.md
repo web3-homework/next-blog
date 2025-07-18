@@ -7,7 +7,7 @@ You can log in with the password "123" for a trial. The limit for the number of 
 ![图片描述](https://github.com/zxytt/next-blog/blob/main/public/sign.png)
 
 ## Performance
-![图片描述](https://github.com/zxytt/next-blog/blob/main/public/performance.png)
+![图片描述](https://github.com/zxytt/next-blog/blob/main/public/performance.jpg)
 
 ## Features
 
